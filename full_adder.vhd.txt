@@ -1,0 +1,55 @@
+library IEEE;
+ use IEEE.STD_LOGIC_1164.ALL;
+                               
+ entity full_adder is
+ Port ( A : in STD_LOGIC;
+ 	 B : in STD_LOGIC;
+ 	 Cin : in STD_LOGIC;
+                 vdd : inout STD_LOGIC;
+ 	 	 vss : inout STD_LOGIC;
+ S : out STD_LOGIC;
+ Cout : out STD_LOGIC);
+ end full_adder;
+                             
+ architecture schematic of full_adder is
+ 
+ signal temp,temp1,temp2,temp12,temp3,result : std_logic;
+ 
+ component and2 is
+ port(A,B : in std_logic;
+      vdd : inout STD_LOGIC;
+      vss : inout STD_LOGIC;
+      Y : out std_logic);
+ end component;
+ 
+ component xor2 is
+  port(A,B : in std_logic;
+       vdd : inout STD_LOGIC;
+       vss : inout STD_LOGIC;
+      Y : out std_logic);
+ end component;
+ 
+ component or2 is
+  port(A,B : in std_logic;
+       vdd : inout STD_LOGIC;
+       vss : inout STD_LOGIC;
+      Y : out std_logic);
+ end component;
+                                         
+ begin
+                                  
+ -- S <= A XOR B XOR Cin ;
+ 
+ A1 : xor2 port map (A,B,vdd,vss,temp);
+ A2 : xor2 port map (temp,Cin,vdd,vss,S);
+ 
+ -- Cout <= (A AND B) OR (Cin AND A) OR (Cin AND B) ;
+ 
+ B1 : and2 port map (A,B,vdd,vss,temp1);
+ B2 : and2 port map (Cin,A,vdd,vss,temp2);
+ B3 : and2 port map (Cin,B,vdd,vss,temp3);
+ B4 : or2 port map (temp1,temp2,vdd,vss,temp12);
+ B5 : or2 port map (temp12,temp3,vdd,vss,Cout);
+                                  
+ end schematic;
+  
